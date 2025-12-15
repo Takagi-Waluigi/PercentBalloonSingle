@@ -6,6 +6,8 @@ void ofApp::setup(){
 	ofBackground(188, 226, 232);
 
 	sound.load("balloon_pop.mp3");
+
+	for(int i = 0; i < NUM_TEAM; i ++) balloonViews[i].setup(i, MAX_LIFE);
 }
 
 void ofApp::setupGUI() {
@@ -21,16 +23,6 @@ void ofApp::setupGUI() {
 
 void ofApp::initGame() {
 
-	for (int i = 0; i < balloonVisualInfo.size(); i++)
-	{
-		balloonVisualInfo[i].x = ofRandom(1.6, 1.9);
-		balloonVisualInfo[i].y = ofRandom(0.7, 0.8);
-		balloonColors[i] = ofColor(
-			ofRandom(50, 255),
-			ofRandom(50, 255),
-			ofRandom(50, 255)
-		);
-	}
 	percent_life = MAX_LIFE;
 	percent_life_visual = MAX_LIFE;
 }
@@ -55,6 +47,13 @@ void ofApp::update(){
 
 	if (percent_life < 0) percent_life = 0;
 	if (percent_life_visual < 0) percent_life_visual = 0;
+
+	for (int i = 0; i < NUM_TEAM; i++) {
+		balloonViews[i].setPercentAnswered(percent_answered);
+		balloonViews[i].setPercentTrue(percent_true);
+		balloonViews[i].setPercentLife(percent_life_visual);
+	}
+	
 }
 
 void ofApp::updateGame()
@@ -68,141 +67,32 @@ void ofApp::draw(){
 	switch (channel)
 	{
 	case 1:
-		drawAllComponent(0, 0,1.0);
+		balloonViews[0].drawAllComponent(0, 0,1.0);
 		break;
 
 	case 2:
-		drawAllComponent(0, 0, 1.0);
+		balloonViews[1].drawAllComponent(0, 0, 1.0);
 		break;
 
 	case 3:
-		drawAllComponent(0, 0, 1.0);
+		balloonViews[2].drawAllComponent(0, 0, 1.0);
 		break;
 
 	case 4:
-		drawAllComponent(0, 0, 1.0);
+		balloonViews[3].drawAllComponent(0, 0, 1.0);
 		break;
 
 	default:
-		drawAllComponent(0, 0, 0.5);
-		drawAllComponent(ofGetWidth() * 0.5, 0, 0.5);
-		drawAllComponent(0, ofGetHeight() * 0.5, 0.5);
-		drawAllComponent(ofGetWidth() * 0.5, ofGetHeight() * 0.5, 0.5);
+		balloonViews[0].drawAllComponent(0, 0, 0.5);
+		balloonViews[1].drawAllComponent(ofGetWidth() * 0.5, 0, 0.5);
+		balloonViews[2].drawAllComponent(0, ofGetHeight() * 0.5, 0.5);
+		balloonViews[3].drawAllComponent(ofGetWidth() * 0.5, ofGetHeight() * 0.5, 0.5);
 		break;
 	}	
 }
 
 void ofApp::drawGUI(ofEventArgs& args) {
 	gui.draw();
-}
-
-void ofApp::drawAllComponent(float pos_x, float pos_y, float scale) {
-	ofPushMatrix();
-	ofTranslate(pos_x, pos_y);
-	ofScale(scale, scale);
-	
-	ofPushStyle();
-	ofSetColor(188, 226, 232);
-	ofDrawRectangle(pos_x * (1 / scale), pos_y * (1 / scale), 0, ofGetWidth() * (1 / scale), ofGetHeight() * (1 / scale));
-	ofPopStyle();
-
-	if (scale < 1)
-	{
-		ofPushStyle();
-		ofNoFill();
-		ofSetLineWidth(5.0);
-		ofSetColor(255, 0, 0);
-		ofDrawRectangle(pos_x * (1 / scale), pos_y * (1 / scale), 0, ofGetWidth() * (1 / scale), ofGetHeight() * (1 / scale));
-		ofPopStyle();
-	}
-	
-
-	for (int i = 0; i < percent_life_visual; i++)
-	{
-		ofPushStyle();
-		float theta_swing = TWO_PI * 0.0125 * sin(ofGetElapsedTimef() * 0.1 - i * 0.05) + TWO_PI * balloonVisualInfo[i].y;
-		drawBalloon(ofGetHeight() * 2.0, ofGetHeight() * balloonVisualInfo[i].x, theta_swing, balloonColors[i]);
-		ofPopStyle();
-	}
-
-	float y_percent_bar = ofGetHeight() * 0.9;
-	float w_percent_bar = ofGetWidth() * 0.6;
-	float h_percent_bar = ofGetHeight() * 0.1;
-
-	drawCabin(ofGetHeight() * 0.9, ofGetWidth() * 0.9, ofGetHeight() * 0.2);
-
-	drawTruePercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_true);
-	drawAnsweredPercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_answered);
-	ofPopMatrix();
-}
-
-void ofApp::drawTruePercentBar(float pos_y, float width, float height, int percent_true) {
-	int percent_max = 100;
-	float margin = width / percent_max;
-	for (int i = 0; i < percent_true; i++) {
-		ofPushStyle();
-		ofSetColor(255);
-		ofSetRectMode(OF_RECTMODE_CENTER);
-
-		ofVec2f pos_rect = ofVec2f(
-			ofGetWidth() * 0.5 + (i - percent_max * 0.5) * margin,
-			pos_y
-		);
-
-		ofDrawRectangle(pos_rect, margin * 0.5, height);
-
-		ofPopStyle();
-	}
-}
-
-void ofApp::drawAnsweredPercentBar(float pos_y, float width, float height, int percent_answered) {
-	ofPushStyle();
-	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofSetColor(255, 0, 0);
-
-	int percent_max = 100;
-	float margin = width / percent_max;
-
-	ofVec2f pos_rect = ofVec2f(
-		ofGetWidth() * 0.5 + (percent_answered - percent_max * 0.5) * margin,
-		pos_y
-	);
-
-	ofDrawRectangle(pos_rect, margin * 0.5, height);
-
-	ofPopStyle();
-}
-
-void ofApp::drawBalloon(float pos_root_y, float radius, float theta, ofColor balloonColor) {
-	ofPushStyle();
-	ofVec2f rootPos = ofVec2f(
-		ofGetWidth() * 0.5,
-		pos_root_y
-	);
-
-	ofVec2f balloonPos = ofVec2f(
-		rootPos.x + radius * cos(theta),
-		rootPos.y + radius * sin(theta)
-	);
-
-	ofSetColor(255);
-	ofDrawLine(rootPos, balloonPos);
-
-	ofSetColor(balloonColor);
-	ofDrawCircle(balloonPos, 50);
-
-	ofPopStyle();
-}
-
-void ofApp::drawCabin(float pos_cavin_y, float width_cavin, float height_cavin) {
-	ofPushMatrix();
-
-	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofSetColor(50, 0, 0);
-
-	ofDrawRectangle(ofGetWidth() * 0.5, pos_cavin_y, width_cavin, height_cavin);
-
-	ofPopMatrix();
 }
 
 //--------------------------------------------------------------
