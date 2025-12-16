@@ -178,7 +178,7 @@ void BalloonView::drawAnswer(float pos_x, float pos_y) {
 
 	ofSetColor(255, 128);
 	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofDrawRectangle(pos_x, pos_y, 140, 140);
+	ofDrawRectangle(pos_x, pos_y, 120, 120);
 
 	ofSetColor(0);
 	font.drawStringCentered(ofToString(percent_answered), pos_x, pos_y);

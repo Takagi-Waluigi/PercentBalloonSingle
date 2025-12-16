@@ -5,6 +5,7 @@
 #include "ofxGui.h"
 #include "BalloonView.h"
 #include "BalloonModel.h"
+#include "QAView.h"
 
 #define MAX_LIFE 100
 #define MAX_INTERVAL 0.5
@@ -37,11 +38,19 @@ class ofApp : public ofBaseApp{
 		AppConstants appConstants;
 
 		ofxPanel gui;
-		ofParameter<int> channel;
+		ofParameterGroup qaDisplayGroup;
+		ofParameter<int> questionId;
+		ofParameter<bool> showQuestion;
+		ofParameter<bool> showAnswer;
+		
+		
+		ofParameter<int> channel;		
 		ofParameter<int> percent_true;
 		ofParameterGroup percent_answered_group;
 		array<ofParameter<int>, NUM_TEAM> percent_answered;
 		ofParameter<bool> answer_go;
+		ofParameter<bool> next_question;
+		
 
 		int percent_life;
 		int percent_life_visual;
@@ -52,4 +61,6 @@ class ofApp : public ofBaseApp{
 
 		array<BalloonView, NUM_TEAM> balloonViews;
 		array<BalloonModel, NUM_TEAM> balloonModels;
+
+		QAView qaView;
 };

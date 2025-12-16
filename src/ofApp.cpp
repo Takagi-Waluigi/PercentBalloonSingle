@@ -2,37 +2,52 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	setupGame();	
+	ofSetVerticalSync(true);
 	ofBackground(188, 226, 232);
 
-	sound.load("balloon_pop.mp3");
-
-	for (int i = 0; i < NUM_TEAM; i++) {
-		balloonModels[i].setSound(sound);
-		balloonViews[i].setup(i, MAX_LIFE);
-	}
+	setupGame();			
 }
 
 void ofApp::setupGUI() {
-	channel.set("channel", 0, 0, 4);
+	qaDisplayGroup.setName("Q&A Controller");
+	questionId.set("question ID", 1, 1, 5);
+	showQuestion.set("show Question", false);
+	showAnswer.set("show Answer", false);
+	qaDisplayGroup.add(questionId);
+	qaDisplayGroup.add(showQuestion);
+	qaDisplayGroup.add(showAnswer);
+	
 	percent_answered_group.setName("Answers");
 	percent_true.set("true percent", 100, 0, 100);
 	percent_answered[0].set("[RED]TeamA answer", 50, 0, 100);
 	percent_answered[1].set("[BLUE]TeamB answer", 50, 0, 100);
 	percent_answered[2].set("[YELLOW]TeamC answer", 50, 0, 100);
 	percent_answered[3].set("[GREEN]TeamD answer", 50, 0, 100);
-	for (int i = 0; i < NUM_TEAM; i++) percent_answered_group.add(percent_answered[i]);
+	for (int i = 0; i < NUM_TEAM; i++) percent_answered_group.add(percent_answered[i]);	
+	channel.set("channel", 0, 0, 4);
 	answer_go.set("GO", false);	
+	next_question.set("NEXT", false);
 
 	gui.setup();
-	gui.add(channel);
+	gui.add(qaDisplayGroup);
 	gui.add(percent_true);
-	gui.add(percent_answered_group);	
+	gui.add(percent_answered_group);
+	gui.add(channel);
 	gui.add(answer_go);
+	gui.add(next_question);
 }
 
 void ofApp::setupGame() {
+	sound.load("balloon_pop.mp3");
+
+	for (int i = 0; i < NUM_TEAM; i++) {
+		balloonModels[i].setSound(sound);
+		balloonViews[i].setup(i, MAX_LIFE);
+	}
+
 	for (int i = 0; i < NUM_TEAM; i++) balloonModels[i].initValue(MAX_LIFE, MAX_INTERVAL);
+
+	qaView.loadQA();
 }
 
 //--------------------------------------------------------------
@@ -48,8 +63,22 @@ void ofApp::update(){
 		for (int i = 0; i < NUM_TEAM; i++) {
 			balloonModels[i].calculateDifferential(percent_answered[i], percent_true);
 		};
+
+		showQuestion = false;
+		showAnswer = false;
 		answer_go = false;
 	}	
+
+	if (next_question) {
+		if (questionId <= 5) questionId++;
+
+		percent_true = 100;
+		for (int i = 0; i < NUM_TEAM; i++) percent_answered[i] = 50;
+
+		showQuestion = false;
+		showAnswer = false;
+		next_question = false;
+	}
 }
 
 //--------------------------------------------------------------
@@ -81,9 +110,9 @@ void ofApp::draw(){
 		break;
 	}	
 
-	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofSetColor(0, 128);
-	ofDrawRectangle(ofGetWidth() * 0.5, ofGetHeight() * 0.5, ofGetWidth() * 0.7, ofGetHeight() * 0.75);
+	if (showQuestion) qaView.drawQuestion(questionId);
+	if (showAnswer) qaView.drawAnswer(questionId);
+	
 }
 
 void ofApp::drawGUI(ofEventArgs& args) {
