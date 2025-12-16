@@ -3,10 +3,10 @@
 void BalloonView::setup(int g_id, int max_life) {
 	groupID = g_id;
 
-	if(!img_basket.load("basket.png"))  cout << "[EROOR] image load is failure(basket)." << endl;
+	if(!img_basket.load("basket.png"))  cout << "[ERROR] image load is failure(basket)." << endl;
 
 	for (int i = 0; i < imgs_balloon.size(); i++) {
-		if (!imgs_balloon[i].load("/Group" + ofToString(groupID) + "/Balloon" + ofToString(i) + ".png"))  cout << "[EROOR] image load is failure(balloon)." << endl;
+		if (!imgs_balloon[i].load("/Group" + ofToString(groupID) + "/Balloon" + ofToString(i) + ".png"))  cout << "[ERROR] image load is failure(balloon)." << endl;
 	}
 
 	for (int i = 0; i < balloonVisualInfo.size(); i++)
@@ -15,6 +15,7 @@ void BalloonView::setup(int g_id, int max_life) {
 		balloonVisualInfo[i].y = ofRandom(0.7, 0.8);
 	}
 
+	font.load(OF_TTF_SANS, 64);
 }
 
 void BalloonView::setPercentLife(int p_life) {
@@ -48,8 +49,8 @@ void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale) {
 	{
 		ofPushStyle();
 		ofNoFill();
-		ofSetLineWidth(5.0);
-		ofSetColor(255, 0, 0);
+		ofSetLineWidth(2.0);
+		ofSetColor(50);
 		ofDrawRectangle(pos_x * (1 / scale), pos_y * (1 / scale), 0, ofGetWidth() * (1 / scale), ofGetHeight() * (1 / scale));
 		ofPopStyle();
 	}
@@ -64,13 +65,17 @@ void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale) {
 	}
 
 	float y_percent_bar = ofGetHeight() * 0.9;
-	float w_percent_bar = ofGetWidth() * 0.6;
+	float w_percent_bar = ofGetWidth() * 0.75;
 	float h_percent_bar = ofGetHeight() * 0.1;
 
 	drawBasket(ofGetHeight() * 0.9, ofGetWidth() * 0.9, ofGetHeight() * 0.2);
 
 	drawTruePercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_true);
 	drawAnsweredPercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_answered);
+	drawLife(ofGetWidth() * 0.9, ofGetHeight() * 0.8);
+	drawAnswer(ofGetWidth() * 0.05, y_percent_bar);
+	drawGroup(ofGetWidth() * 0.1, ofGetHeight() * 0.125);
+
 	ofPopMatrix();
 }
 
@@ -79,7 +84,7 @@ void BalloonView::drawTruePercentBar(float pos_y, float width, float height, int
 	float margin = width / percent_max;
 	for (int i = 0; i < percent_true; i++) {
 		ofPushStyle();
-		ofSetColor(255);
+		ofSetColor(255, 255.0 * (float(i) - 100.0) * 0.01, 0);
 		ofSetRectMode(OF_RECTMODE_CENTER);
 
 		ofVec2f pos_rect = ofVec2f(
@@ -96,7 +101,7 @@ void BalloonView::drawTruePercentBar(float pos_y, float width, float height, int
 void BalloonView::drawAnsweredPercentBar(float pos_y, float width, float height, int percent_answered) {
 	ofPushStyle();
 	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofSetColor(255, 0, 0);
+	ofSetColor(0, 0,255);
 
 	int percent_max = 100;
 	float margin = width / percent_max;
@@ -106,7 +111,7 @@ void BalloonView::drawAnsweredPercentBar(float pos_y, float width, float height,
 		pos_y
 	);
 
-	ofDrawRectangle(pos_rect, margin * 0.5, height);
+	ofDrawRectangle(pos_rect, margin * 0.75, height * 1.2);
 
 	ofPopStyle();
 }
@@ -145,4 +150,73 @@ void BalloonView::drawBasket(float pos_cavin_y, float width_cavin, float height_
 	img_basket.draw(basketPos);
 
 	ofPopMatrix();
+}
+
+void BalloonView::drawLife(float pos_x, float pos_y) {
+	ofPushStyle();
+
+	ofRectMode(OF_RECTMODE_CENTER);
+	float imgScale = 2.0;
+	ofVec2f imgScaleXY = ofVec2f(
+		imgs_balloon[3].getWidth() * imgScale,
+		imgs_balloon[3].getHeight() * imgScale
+		);
+
+	float pos_y_siwinging = pos_y + 15 * sin(ofGetElapsedTimef());
+
+	ofSetColor(255);
+	ofDrawLine(pos_x, pos_y_siwinging, pos_x, ofGetHeight());
+
+	imgs_balloon[3].draw(pos_x, pos_y_siwinging,  imgScaleXY.x, imgScaleXY.y);
+	font.drawStringCentered(ofToString(percent_life_visual), pos_x, pos_y_siwinging);	
+	
+	ofPopStyle();
+}
+
+void BalloonView::drawAnswer(float pos_x, float pos_y) {
+	ofPushStyle();
+
+	ofSetColor(255, 128);
+	ofSetRectMode(OF_RECTMODE_CENTER);
+	ofDrawRectangle(pos_x, pos_y, 140, 140);
+
+	ofSetColor(0);
+	font.drawStringCentered(ofToString(percent_answered), pos_x, pos_y);
+
+	ofPopStyle();
+}
+
+void BalloonView::drawGroup(float pos_x, float pos_y) {
+	ofPushStyle();
+
+	string teamName = "NAME";
+	switch (groupID)
+	{
+	case 0:
+		ofSetColor(128, 0, 0);
+		teamName = "A";
+		break;
+
+	case 1:
+		ofSetColor(0, 0, 128);
+		teamName = "B";
+			break;
+
+	case 2:
+		ofSetColor(128, 128, 0);
+		teamName = "C";
+			break;
+
+	case 3:
+		ofSetColor(0, 128, 0);
+		teamName = "D";
+			break;
+	}
+
+	ofDrawCircle(pos_x, pos_y, 75);
+
+	ofSetColor(255);
+	font.drawStringCentered(teamName, pos_x, pos_y);
+
+	ofPopStyle();
 }

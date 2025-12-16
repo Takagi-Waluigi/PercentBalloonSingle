@@ -1,5 +1,6 @@
 #pragma once
 #include "ofMain.h"
+#include "ofxCenteredTrueTypeFont.h"
 
 class BalloonView
 {
@@ -13,6 +14,9 @@ public:
 	void drawBalloon(float pos_root_y, float radius, float theta, ofColor balloonColor, int img_index);
 	void drawBasket(float pos_cavin_y, float width_cavin, float height_cavin);
 	void drawAllComponent(float pos_x, float pos_y, float scale);
+	void drawLife(float pos_x, float pos_y);
+	void drawAnswer(float pos_x, float pos_y);
+	void drawGroup(float pos_x, float pos_y);
 
 private:
 	int groupID = 1;
@@ -25,5 +29,7 @@ private:
 
 	array<ofImage, 4> imgs_balloon;
 	ofImage img_basket;
+
+	ofxCenteredTrueTypeFont font;
 };
 

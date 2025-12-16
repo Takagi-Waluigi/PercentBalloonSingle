@@ -15,7 +15,6 @@ void ofApp::setup(){
 
 void ofApp::setupGUI() {
 	channel.set("channel", 0, 0, 4);
-
 	percent_answered_group.setName("Answers");
 	percent_true.set("true percent", 100, 0, 100);
 	percent_answered[0].set("[RED]TeamA answer", 50, 0, 100);
@@ -23,8 +22,7 @@ void ofApp::setupGUI() {
 	percent_answered[2].set("[YELLOW]TeamC answer", 50, 0, 100);
 	percent_answered[3].set("[GREEN]TeamD answer", 50, 0, 100);
 	for (int i = 0; i < NUM_TEAM; i++) percent_answered_group.add(percent_answered[i]);
-	answer_go.set("GO", false);
-	
+	answer_go.set("GO", false);	
 
 	gui.setup();
 	gui.add(channel);
@@ -47,7 +45,9 @@ void ofApp::update(){
 	}
 
 	if (answer_go) {
-		for (int i = 0; i < NUM_TEAM; i++) balloonModels[i].calculateDifferential(percent_answered[i], percent_true);
+		for (int i = 0; i < NUM_TEAM; i++) {
+			balloonModels[i].calculateDifferential(percent_answered[i], percent_true);
+		};
 		answer_go = false;
 	}	
 }
@@ -80,6 +80,10 @@ void ofApp::draw(){
 		balloonViews[3].drawAllComponent(ofGetWidth() * 0.5, ofGetHeight() * 0.5, 0.5);
 		break;
 	}	
+
+	ofSetRectMode(OF_RECTMODE_CENTER);
+	ofSetColor(0, 128);
+	ofDrawRectangle(ofGetWidth() * 0.5, ofGetHeight() * 0.5, ofGetWidth() * 0.7, ofGetHeight() * 0.75);
 }
 
 void ofApp::drawGUI(ofEventArgs& args) {
