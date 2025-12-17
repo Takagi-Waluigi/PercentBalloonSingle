@@ -4,6 +4,7 @@ void BalloonView::setup(int g_id, int max_life) {
 	groupID = g_id;
 
 	if(!img_basket.load("basket.png"))  cout << "[ERROR] image load is failure(basket)." << endl;
+	if (!img_answer_bg.load("Answer_area.png"))  cout << "[ERROR] image load is failure(answer bg)." << endl;
 
 	for (int i = 0; i < imgs_balloon.size(); i++) {
 		if (!imgs_balloon[i].load("/Group" + ofToString(groupID) + "/Balloon" + ofToString(i) + ".png"))  cout << "[ERROR] image load is failure(balloon)." << endl;
@@ -73,7 +74,7 @@ void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale) {
 	drawTruePercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_true);
 	drawAnsweredPercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_answered);
 	drawLife(ofGetWidth() * 0.9, ofGetHeight() * 0.8);
-	drawAnswer(ofGetWidth() * 0.05, y_percent_bar);
+	drawAnswer(ofGetWidth() * 0.075, y_percent_bar);
 	drawGroup(ofGetWidth() * 0.1, ofGetHeight() * 0.125);
 
 	ofPopMatrix();
@@ -174,14 +175,15 @@ void BalloonView::drawLife(float pos_x, float pos_y) {
 }
 
 void BalloonView::drawAnswer(float pos_x, float pos_y) {
+	float y_offset = 10;
 	ofPushStyle();
 
-	ofSetColor(255, 128);
+	ofSetColor(255);
 	ofSetRectMode(OF_RECTMODE_CENTER);
-	ofDrawRectangle(pos_x, pos_y, 120, 120);
+	img_answer_bg.draw(pos_x, pos_y, 130, 130);
 
 	ofSetColor(0);
-	font.drawStringCentered(ofToString(percent_answered), pos_x, pos_y);
+	font.drawStringCentered(ofToString(percent_answered), pos_x, pos_y + y_offset);
 
 	ofPopStyle();
 }

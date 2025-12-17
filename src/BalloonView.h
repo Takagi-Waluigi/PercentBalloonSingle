@@ -29,6 +29,7 @@ private:
 
 	array<ofImage, 4> imgs_balloon;
 	ofImage img_basket;
+	ofImage img_answer_bg;
 
 	ofxCenteredTrueTypeFont font;
 };
