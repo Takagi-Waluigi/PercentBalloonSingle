@@ -1,7 +1,7 @@
 #pragma once
 #include "ofMain.h"
-
 #define NUM_QA 5
+
 class QAView
 {
 public:

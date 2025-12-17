@@ -1,17 +1,17 @@
 #pragma once
 
-#include "AppConstants.h"
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "BalloonView.h"
 #include "BalloonModel.h"
 #include "QAView.h"
 
-#define MAX_LIFE 100
+#define MAX_LIFE 150
 #define MAX_INTERVAL 0.5
 #define MIN_INTERVAL 0.03
 #define INT_VELOCITY 0.05
 #define NUM_TEAM 4
+#define NUM_QA 5
 
 class ofApp : public ofBaseApp{
 
@@ -35,25 +35,23 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
-		AppConstants appConstants;
-
-		ofxPanel gui;
-		ofParameterGroup qaDisplayGroup;
-		ofParameter<int> questionId;
-		ofParameter<bool> showQuestion;
-		ofParameter<bool> showAnswer;
-		
-		
-		ofParameter<int> channel;		
-		ofParameter<int> percent_true;
+		ofxPanel gui;		
+		ofParameter<bool> showQuestionBoard;
+		ofParameter<bool> showAnswerBoard;
+		ofParameter<int> percent_manual;
 		ofParameterGroup percent_answered_group;
 		array<ofParameter<int>, NUM_TEAM> percent_answered;
-		ofParameter<bool> answer_go;
-		ofParameter<bool> next_question;
-		
+		ofParameterGroup gameFlowSwitches;
+		ofParameter<bool> showAnswerPercent;
+		ofParameter<bool> enablePop;
+		ofParameter<bool> enableNextQuestion;
+		ofParameter<int> questionId;
+		ofParameter<int> channel;
 
 		int percent_life;
 		int percent_life_visual;
+		array<int, NUM_QA> percents_true;
+
 		float timef_balloon_destroy_interval = MAX_INTERVAL;
 		float timef_balloon_last_destory = 0;
 

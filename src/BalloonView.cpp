@@ -36,7 +36,11 @@ void BalloonView::setPercentTrue(int p_true)
 	percent_true = p_true;
 }
 
-void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale) {
+void BalloonView::setShowAnswerPercent(bool show_p_answered) {
+
+}
+
+void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale, bool showAnswerPercent) {
 	ofPushMatrix();
 	ofTranslate(pos_x, pos_y);
 	ofScale(scale, scale);
@@ -71,7 +75,7 @@ void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale) {
 
 	drawBasket(ofGetHeight() * 0.9, ofGetWidth() * 0.9, ofGetHeight() * 0.2);
 
-	drawTruePercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_true);
+	drawTruePercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_true, showAnswerPercent);
 	drawAnsweredPercentBar(y_percent_bar, w_percent_bar, h_percent_bar, percent_answered);
 	drawLife(ofGetWidth() * 0.9, ofGetHeight() * 0.8);
 	drawAnswer(ofGetWidth() * 0.075, y_percent_bar);
@@ -80,12 +84,13 @@ void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale) {
 	ofPopMatrix();
 }
 
-void BalloonView::drawTruePercentBar(float pos_y, float width, float height, int percent_true) {
+void BalloonView::drawTruePercentBar(float pos_y, float width, float height, int percent_true, bool showAnswerPercent) {
 	int percent_max = 100;
 	float margin = width / percent_max;
 	for (int i = 0; i < percent_true; i++) {
 		ofPushStyle();
-		ofSetColor(255, 255.0 * (float(i) - 100.0) * 0.01, 0);
+		float green = ofMap(i, 0, 100, 200, 0);
+		ofSetColor(255, green, 0);
 		ofSetRectMode(OF_RECTMODE_CENTER);
 
 		ofVec2f pos_rect = ofVec2f(
@@ -94,6 +99,18 @@ void BalloonView::drawTruePercentBar(float pos_y, float width, float height, int
 		);
 
 		ofDrawRectangle(pos_rect, margin * 0.5, height);
+		
+
+		if (showAnswerPercent) {
+			ofVec2f posDrawAnswerPercent = ofVec2f(
+				ofGetWidth() * 0.5 + (percent_true - percent_max * 0.5) * margin,
+				pos_y + 32
+			);
+
+			ofSetColor(255, 0, 0);
+			font.drawString(ofToString(percent_true) + "%", posDrawAnswerPercent.x, posDrawAnswerPercent.y);
+
+		}
 
 		ofPopStyle();
 	}
@@ -169,7 +186,9 @@ void BalloonView::drawLife(float pos_x, float pos_y) {
 	ofDrawLine(pos_x, pos_y_siwinging, pos_x, ofGetHeight());
 
 	imgs_balloon[3].draw(pos_x, pos_y_siwinging,  imgScaleXY.x, imgScaleXY.y);
-	font.drawStringCentered(ofToString(percent_life_visual), pos_x, pos_y_siwinging);	
+
+	int pos_x_offset = (percent_life_visual >= 100) ? 5 : 0;
+	font.drawStringCentered(ofToString(percent_life_visual), pos_x - pos_x_offset, pos_y_siwinging);	
 	
 	ofPopStyle();
 }

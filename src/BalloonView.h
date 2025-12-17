@@ -9,11 +9,13 @@ public:
 	void setPercentLife(int p_life);
 	void setPercentAnswered(int p_answered);
 	void setPercentTrue(int p_true);
-	void drawTruePercentBar(float pos_y, float width, float height, int percent_true);
+	void setShowAnswerPercent(bool show_p_answered);
+
+	void drawTruePercentBar(float pos_y, float width, float height, int percent_true, bool showAnswerPercent);
 	void drawAnsweredPercentBar(float pos_y, float width, float height, int percent_answered);
 	void drawBalloon(float pos_root_y, float radius, float theta, ofColor balloonColor, int img_index);
 	void drawBasket(float pos_cavin_y, float width_cavin, float height_cavin);
-	void drawAllComponent(float pos_x, float pos_y, float scale);
+	void drawAllComponent(float pos_x, float pos_y, float scale, bool showAnswerPercent);
 	void drawLife(float pos_x, float pos_y);
 	void drawAnswer(float pos_x, float pos_y);
 	void drawGroup(float pos_x, float pos_y);

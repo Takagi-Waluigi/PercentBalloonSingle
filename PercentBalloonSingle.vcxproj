@@ -182,7 +182,6 @@
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
-    <ClCompile Include="src\AppConstants.cpp" />
     <ClCompile Include="src\BalloonModel.cpp" />
     <ClCompile Include="src\BalloonView.cpp" />
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
@@ -199,7 +198,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h" />
-    <ClInclude Include="src\AppConstants.h" />
     <ClInclude Include="src\BalloonModel.h" />
     <ClInclude Include="src\BalloonView.h" />
     <ClInclude Include="..\..\..\addons\ofxCenteredTrueTypeFont\src\ofxCenteredTrueTypeFont.h" />
