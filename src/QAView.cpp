@@ -3,7 +3,7 @@
 void QAView::loadQA() {
 	for (int i = 0; i < NUM_QA; i++) {
 		if(!img_questions[i].load("/Question/Q"  + ofToString(i + 1) + ".png")) cout << "[ERROR] image load is failure(question)." << endl;
-		if(!img_answers[i].load("/Question/Q" + ofToString(i + 1) + ".png")) cout << "[ERROR] image load is failure(answer)." << endl;
+		if(!img_answers[i].load("/Answer/A" + ofToString(i + 1) + ".png")) cout << "[ERROR] image load is failure(answer)." << endl;
 	}
 }
 
