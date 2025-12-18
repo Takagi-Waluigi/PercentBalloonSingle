@@ -5,6 +5,8 @@ void QAView::loadQA() {
 		if(!img_questions[i].load("/Question/Q"  + ofToString(i + 1) + ".png")) cout << "[ERROR] image load is failure(question)." << endl;
 		if(!img_answers[i].load("/Answer/A" + ofToString(i + 1) + ".png")) cout << "[ERROR] image load is failure(answer)." << endl;
 	}
+
+	img_title.load("Title.png");
 }
 
 void QAView::drawQuestion(int id) {
@@ -24,3 +26,13 @@ void QAView::drawAnswer(int id) {
 
 	ofPopStyle();
 }
+
+void QAView::drawTitle() {
+	ofPushStyle();
+	ofSetColor(255);
+	ofSetRectMode(OF_RECTMODE_CENTER);
+	img_title.draw(ofGetWidth() * 0.5, ofGetHeight() * 0.5, ofGetWidth() * 0.75, ofGetHeight() * 0.75);
+
+	ofPopStyle();
+}
+

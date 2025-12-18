@@ -47,6 +47,7 @@ class ofApp : public ofBaseApp{
 		ofParameter<bool> enableNextQuestion;
 		ofParameter<int> questionId;
 		ofParameter<int> channel;
+		ofParameter<bool> showTitle;
 
 		int percent_life;
 		int percent_life_visual;

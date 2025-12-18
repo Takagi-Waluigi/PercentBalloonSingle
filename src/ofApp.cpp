@@ -9,6 +9,7 @@ void ofApp::setup(){
 }
 
 void ofApp::setupGUI() {
+	showTitle.set("show title", true);
 	questionId.set("question ID", 0, 0, 4);
 	channel.set("channel", 0, 0, 4);
 
@@ -37,6 +38,7 @@ void ofApp::setupGUI() {
 	gameFlowSwitches.add(enableNextQuestion);
 
 	gui.setup();
+	gui.add(showTitle);
 	gui.add(questionId);
 	gui.add(channel);
 	gui.add(percent_answered_group);
@@ -131,6 +133,7 @@ void ofApp::draw(){
 
 	if (showQuestionBoard) qaView.drawQuestion(questionId);
 	if (showAnswerBoard) qaView.drawAnswer(questionId);
+	if (showTitle) qaView.drawTitle();
 	
 }
 
