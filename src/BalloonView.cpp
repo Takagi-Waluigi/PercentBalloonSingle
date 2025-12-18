@@ -81,6 +81,10 @@ void BalloonView::drawAllComponent(float pos_x, float pos_y, float scale, bool s
 	drawAnswer(ofGetWidth() * 0.075, y_percent_bar);
 	drawGroup(ofGetWidth() * 0.1, ofGetHeight() * 0.125);
 
+	if (percent_life_visual <= 0) {
+		ofSetColor(0, 128);
+		ofDrawRectangle(0, 0, ofGetWidth() * 2, ofGetHeight() * 2);
+	}
 	ofPopMatrix();
 }
 
